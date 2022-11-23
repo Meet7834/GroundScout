@@ -1,6 +1,6 @@
 <%= layout('layout/layout.ejs') %>
     <div class="row">
-        <div class="col-6 offset-3">
+        <div class="col-6">
             <div class="card mb-3">
                 <img src="<%= camp.image %>" class="card-img-top" alt="...">
                 <div class="card-body">
@@ -24,17 +24,33 @@
                     </form>
                 </div>
             </div>
+            
+        </div>
+        <div class="col-4 offset-1">
             <h3>Leave A Review: </h3>
-            <form action="" class="mb-3">
+            <form action="/campgrounds/<%= camp.id %>/review" method="POST" class="mb-4 needs-validation" novalidate>
                 <div class="mb-3">
                     <label for="rating" class="form-label">Rating: </label>
                     <input type="range" name="rating" id="rating" min="1" max="5" class="form-range">
                 </div>
                 <div class="mb-3">
                     <label for="reviewBody" class="form-label">Reviews: </label>
-                    <textarea name="" id="reviewBody" cols="30" rows="3" class="form-control"></textarea>
+                    <textarea name="content" id="reviewBody" cols="30" rows="3" class="form-control" required></textarea>
                 </div>
                 <button class="btn btn-success">Submit</button>
             </form>
+            <h2>Reviews: </h2>
+            <% for(let review of camp.reviews) { %>
+                <div class="review-piece card mb-2">
+                    <div class="card-body">
+                        <h6 class="card-title">Rating: <%= review.rating %></h6>
+                        <p class="card-text"><%= review.content %></p>
+                        <form action="/campgrounds/<%=camp.id%>/reviews/<%= review.id %>?_method=DELETE" method="POST" class="d-inline">
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </div>
+                    
+                </div>
+            <% } %>
         </div>
     </div>
