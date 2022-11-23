@@ -1,0 +1,40 @@
+<%= layout('layout/layout.ejs') %>
+    <div class="row">
+        <div class="col-6 offset-3">
+            <div class="card mb-3">
+                <img src="<%= camp.image %>" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <%= camp.title %>
+                    </h5>
+                    <p class="card-text">
+                        <%= camp.description %>
+                    </p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <%= camp.location %>
+                    </li>
+                    <li class="list-group-item">₹<%= camp.price %>/Night</li>
+                </ul>
+                <div class="card-body">
+                    <a href="/campgrounds/<%=camp.id%>/edit" class="card-link btn btn-info">Edit</a>
+                    <form action="/campgrounds/<%=camp.id%>/?_method=DELETE" method="POST" class="d-inline">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+            <h3>Leave A Review: </h3>
+            <form action="" class="mb-3">
+                <div class="mb-3">
+                    <label for="rating" class="form-label">Rating: </label>
+                    <input type="range" name="rating" id="rating" min="1" max="5" class="form-range">
+                </div>
+                <div class="mb-3">
+                    <label for="reviewBody" class="form-label">Reviews: </label>
+                    <textarea name="" id="reviewBody" cols="30" rows="3" class="form-control"></textarea>
+                </div>
+                <button class="btn btn-success">Submit</button>
+            </form>
+        </div>
+    </div>

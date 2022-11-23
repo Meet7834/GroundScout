@@ -1,0 +1,19 @@
+<%= layout('layout/layout.ejs') %>
+<h1>All Campgrounds</h1>
+
+<% for( let camp of allCamps) { %>
+    <div class="card">
+        <div class="row">
+            <div class="col-md-4">
+                <img src="<%= camp.image %>" alt="" class="img img-fluid">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <a href="/campgrounds/<%= camp.id %>" style="text-decoration: none; color: black";><h5 class="card-title"><%= camp.title %> </h5> </a>
+                    <p class="card-text"><%= camp.description %> </p>
+                    <small class="text-mutes"><%= camp.location %> </small>
+                </div>
+            </div>
+        </div>
+    </div>
+<% } %>

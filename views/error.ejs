@@ -1,0 +1,7 @@
+<%= layout('layout/layout.ejs') %>
+<div class="alert alert-danger" role="alert">
+    <h4 class="alert-heading"><%= err.message %> </h4>
+    <p>Error Code: <%=statusCode %></p>
+    <hr>
+    <p class="mb-0"><%= err.stack %></p>
+</div>

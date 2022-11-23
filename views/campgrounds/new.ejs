@@ -1,0 +1,61 @@
+<%= layout('layout/layout.ejs') %>
+    <div class="row">
+        <h1 class="text-center mb-3">New Campground: </h1>
+        <div class="col-6 offset-3">
+            <form action="/campgrounds/new" class="needs-validation" method="post" novalidate>
+                <div class="mb-3">
+                    <label for="campTitle" class="form-label mb-2">Campground Title: </label>
+                    <input type="text" id="campTitle" name="title" class="form-control" required>
+                    <div class="valid-feedback">Looks Good!</div>
+                </div>
+                <div class="mb-3">
+                    <label for="campLocation" class="form-label">Location: </label>
+                    <input type="text" id="campLocation" name="location" class="form-control" required>
+                    <div class="valid-feedback">Looks Good!</div>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-8">
+                        <label for="image" class="form-label">Image URL: </label>
+                        <input type="text" id="image" name="image" class="form-control" required>
+                        <div class="valid-feedback">Looks Good!</div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="price" class="form-label">Price: </label>
+                        <input type="number" class="form-control" id="price" name="price" aria-label="Amount" required>
+                        <div class="valid-feedback">Looks Good!</div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Description: </span>
+                    <textarea class="form-control" name="description" id="description" aria-label="With textarea"
+                        required></textarea>
+                        <div class="valid-feedback">Looks Good!</div>
+                </div>
+                <div class="mb-3">
+                    <a href="/campgrounds/" class="btn btn-danger">Cancel</a>
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        (function () {
+            'use strict'
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            const forms = document.querySelectorAll('.needs-validation')
+
+            // Loop over them and prevent submission
+            Array.from(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
