@@ -28,7 +28,7 @@
         </div>
         <div class="col-4 offset-1">
             <h3>Leave A Review: </h3>
-            <form action="/campgrounds/<%= camp.id %>/review" method="POST" class="mb-4 needs-validation" novalidate>
+            <form action="/campgrounds/<%= camp.id %>/reviews" method="POST" class="mb-4 needs-validation" novalidate>
                 <div class="mb-3">
                     <label for="rating" class="form-label">Rating: </label>
                     <input type="range" name="rating" id="rating" min="1" max="5" class="form-range">
