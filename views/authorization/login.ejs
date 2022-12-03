@@ -1,0 +1,15 @@
+<%= layout('layout/layout.ejs') %>
+<h1>Login</h1>
+<form action="/login" method="POST" class="mb-4 needs-validation" novalidate>
+    <div class="mb-3">
+        <label for="username" class="form-label mb-2">Username: </label>
+        <input type="text" id="username" name="username" class="form-control" required>
+        <div class="valid-feedback">Looks Good!</div>
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label mb-2">Password: </label>
+        <input type="password" id="password" name="password" class="form-control" required>
+        <div class="valid-feedback">Looks Good!</div>
+    </div>
+    <button class="btn btn-success">Login</button>
+</form>

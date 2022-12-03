@@ -11,6 +11,15 @@
                 <a class="nav-link" href="/campgrounds">All Campgrounds</a>
                 <a class="nav-link" href="/campgrounds/new">Add A Campground</a>
             </div>
+            <div class="navbar-nav ms-auto">
+                <% if (!currentUser) { %>
+                    <a class="nav-link" href="/login">Login</a>
+                    <a class="nav-link" href="/register">Sign Up</a>
+                <% } else { %>
+                    <a class="nav-link" href="#"><%= currentUser.username %></a>
+                    <a class="nav-link" href="/logout">Log Out</a>
+                <% } %>
+            </div>
         </div>
     </div>
 </nav>

@@ -4,7 +4,7 @@ const catchAsync = require('../utils/catchAsync');
 const ExpressError = require('../utils/ExpressError');
 const {campgroundSchema} = require("../schemas");
 const Campground = require("../models/campground");
-const campground = require('../models/campground');
+const isLoggedIn = require('../middleware');
 
 //Middlewares:
 const validateCampground = (req, res, next) => {
@@ -24,7 +24,7 @@ router.get('/', catchAsync(async (req, res) => {
     res.render('campgrounds/index.ejs', { allCamps, title: 'All Campgrounds' });
 }))
 
-router.get('/new', (req, res) => {
+router.get('/new', isLoggedIn, (req, res) => {
     res.render('campgrounds/new.ejs', { title: 'Create A Campground' });
 })
 
@@ -39,7 +39,7 @@ router.get('/:id', catchAsync(async (req, res, next) => {
     }
 }))
 
-router.get('/:id/edit', catchAsync(async (req, res, next) => {
+router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res, next) => {
     const { id } = req.params;
     const camp = await Campground.findById(id);
     if(!camp){
@@ -50,7 +50,7 @@ router.get('/:id/edit', catchAsync(async (req, res, next) => {
 }))
 
 // Post Routes: 
-router.post('/new', validateCampground, catchAsync(async (req, res, next) => {
+router.post('/new', isLoggedIn, validateCampground, catchAsync(async (req, res, next) => {
     const { title, location, image, price, description } = req.body;
     const newCamp = await Campground({ title: title, location: location, image: image, price: price, description: description });
     await newCamp.save();
@@ -60,7 +60,7 @@ router.post('/new', validateCampground, catchAsync(async (req, res, next) => {
 }))
 
 //Patch Routes:
-router.patch('/:id', validateCampground, catchAsync(async (req, res) => {
+router.patch('/:id', isLoggedIn, validateCampground, catchAsync(async (req, res) => {
     const { id } = req.params;
     const { title, location, price, description, image } = req.body;
     await Campground.findByIdAndUpdate(id, { title, location, price, description, image });
@@ -70,7 +70,7 @@ router.patch('/:id', validateCampground, catchAsync(async (req, res) => {
 }))
 
 //Delete Routes:
-router.delete('/:id', catchAsync(async (req, res) => {
+router.delete('/:id', isLoggedIn, catchAsync(async (req, res) => {
     const { id } = req.params;
     await Campground.findByIdAndDelete(id);
     console.log("Deleted from Database");
