@@ -1,8 +1,9 @@
+const { cloudinary } = require("../cloudinary");
 const Campground = require("../models/campground");
 
 module.exports.allCampsGet = async (req, res) => {
     const allCamps = await Campground.find({}).populate('author');
-    res.render('campgrounds/index.ejs', {allCamps, title: 'All Campgrounds'});
+    res.render('campgrounds/index.ejs', { allCamps, title: 'All Campgrounds' });
 };
 
 module.exports.renderCreateCampGet = (req, res) => {
@@ -11,11 +12,11 @@ module.exports.renderCreateCampGet = (req, res) => {
 
 module.exports.renderCampGet = async (req, res, next) => {
     const { id } = req.params;
-    const camp = await Campground.findById(id).populate({path:'reviews', populate: 'author'}).populate('author');
-    if(!camp){
+    const camp = await Campground.findById(id).populate({ path: 'reviews', populate: 'author' }).populate('author');
+    if (!camp) {
         req.flash('error', "I am sorry, We can't find the campground");
         res.redirect('/campgrounds');
-    }else{
+    } else {
         res.render('campgrounds/details.ejs', { camp, title: camp.title });
     }
 };
@@ -23,7 +24,7 @@ module.exports.renderCampGet = async (req, res, next) => {
 module.exports.renderEditCampGet = async (req, res, next) => {
     const { id } = req.params;
     const camp = await Campground.findById(id);
-    if(!camp){
+    if (!camp) {
         req.flash('error', "I am sorry, We can't find the campground");
         res.redirect('/campgrounds');
     }
@@ -33,19 +34,30 @@ module.exports.renderEditCampGet = async (req, res, next) => {
 module.exports.createCampPost = async (req, res, next) => {
     const { title, location, image, price, description } = req.body;
     const newCamp = await Campground({ title: title, location: location, image: image, price: price, description: description });
+    newCamp.images = req.files.map(file => ({ url: file.path, filename: file.filename }));
     newCamp.author = req.user._id;
     await newCamp.save();
-    console.log("Added to Database");
-    req.flash('success', 'Successfully made a new Campground!'); 
+    console.log(newCamp);
+    req.flash('success', 'Successfully made a new Campground!');
     res.redirect(`/campgrounds/${newCamp._id}`);
 };
 
 module.exports.editCampPatch = async (req, res) => {
     const { id } = req.params;
-    const { title, location, price, description, image } = req.body;
-    await Campground.findByIdAndUpdate(id, { title, location, price, description, image });
+    const { title, location, price, description } = req.body;
+    await Campground.findByIdAndUpdate(id, { title, location, price, description });
+    editCamp = await Campground.findById(id);
+    const img = req.files.map(file => ({ url: file.path, filename: file.filename }));
+    editCamp.images.push(...img);
+    await editCamp.save();
+    if (req.body.deleteImages) {
+        for (let filename of req.body.deleteImages) {
+            await cloudinary.uploader.destroy(filename);
+        }
+        await editCamp.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages } } } })
+    }
     console.log("Database Updated");
-    req.flash('success', 'Successfully updated the Campground!'); 
+    req.flash('success', 'Successfully updated the Campground!');
     res.redirect(`/campgrounds/${id}`);
 };
 
@@ -53,6 +65,6 @@ module.exports.deleteCampDelete = async (req, res) => {
     const { id } = req.params;
     await Campground.findByIdAndDelete(id);
     console.log("Deleted from Database");
-    req.flash('success', 'Successfully deleted the Campground!'); 
+    req.flash('success', 'Successfully deleted the Campground!');
     res.redirect('/campgrounds/');
 };

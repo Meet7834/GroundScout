@@ -2,7 +2,7 @@
     <div class="row">
         <h1 class="text-center mb-4">Edit Your Campground: </h1>
         <div class="col-6 offset-3">
-            <form action="/campgrounds/<%=camp.id%>/?_method=PATCH" class="needs-validation" method="post" novalidate>
+            <form action="/campgrounds/<%=camp.id%>/?_method=PATCH" class="needs-validation" method="post" novalidate enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="campTitle" class="form-label mb-2">Campground Title: </label>
                     <input type="text" id="campTitle" name="title" class="form-control" value="<%= camp.title %>" required>
@@ -13,8 +13,8 @@
                 </div>
                 <div class="row g-3 mb-3">
                     <div class="col-md-8">
-                        <label for="image" class="form-label">Image URL: </label>
-                        <input type="text" id="image" name="image" class="form-control" value="<%= camp.image %>" required>
+                        <label for="image" class="form-label">Add More Images: </label>
+                        <input type="file" name="image" id="image" class="form-control" multiple>
                     </div>
                     <div class="col-md-4">
                         <label for="price" class="form-label">Price: </label>
@@ -24,6 +24,15 @@
                 <div class="input-group mb-3">
                     <span class="input-group-text">Description: </span>
                     <textarea class="form-control" name="description" id="description" rows="4" required><%= camp.description %></textarea>
+                </div>
+                <div class="mb-3">
+                    <% camp.images.forEach((img,i) => { %>
+                        <img src="<%= img.thumbnail %>" alt="" class="img-thumbnail">
+                        <label for="image-<%= i %>">Delete?</label>
+                        <div class="form-check-inline">
+                            <input type="checkbox" id="image-<%= i %>" name="deleteImages[]" value="<%= img.filename %>">
+                        </div>
+                    <% }) %>
                 </div>
                 <div class="mb-3">
                     <a href="/campgrounds/<%=camp.id%>/" class="btn btn-danger">Cancel</a>
