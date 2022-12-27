@@ -1,3 +1,4 @@
+const { json } = require('express');
 const { func } = require('joi');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
@@ -11,6 +12,8 @@ const ImageSchema = new Schema({
 ImageSchema.virtual('thumbnail').get(function(){
     return this.url.replace('/upload', '/upload/w_200')
 });
+
+const opts = { toJSON: {virtuals: true}};
 
 const CampGroundSchema = new Schema({
     title: String,
@@ -39,7 +42,7 @@ const CampGroundSchema = new Schema({
             ref: 'Review'
         }
     ]
-})
+}, opts)
 
 CampGroundSchema.post('findOneAndDelete', async function (doc) {
     if (doc.reviews.length) {
@@ -50,5 +53,12 @@ CampGroundSchema.post('findOneAndDelete', async function (doc) {
         })
     }
 })
+
+CampGroundSchema.virtual('properties.popUpMarkup').get(function(){
+    return `
+    <strong><a href="/campgrounds/${this.id}" style="text-decoration: none; color: #039dfc">${this.title}</a></strong>
+    <p>${this.description.substring(0,80)}...</p>
+    `
+});
 
 module.exports = mongoose.model("Campground", CampGroundSchema);
