@@ -20,6 +20,11 @@ const User = require('./models/user');
 const ExpressError = require('./utils/ExpressError');
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
+const MongoStore = require('connect-mongo');
+const MongoDBStore = require('connect-mongo')(session);
+
+// const dbUrl = process.env.DB_URL;
+const dbUrl = "mongodb://127.0.0.1:27017/YelpCamp";
 
 //Routes:
 const campgroundRoutes = require('./routes/campgroundRoutes');
@@ -42,10 +47,21 @@ app.use(mongoSanitize({
     replaceWith: '_'
 }));
 
+const secret = process.env.SECRET || 'thisisasecret';
+const store = new MongoDBStore({
+    url:dbUrl, 
+    secret,
+    touchAfter: 24*60*60
+});
+
+store.on('error',(e)=>{
+    console.log('An error occured in the session', e);
+})
+
 //Configuring Session: 
 const sessionConfig = {
     name:'session',
-    secret: 'thisisasecret',
+    secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -61,9 +77,8 @@ app.use(flash());
 app.use(
     helmet({
         crossOriginEmbedderPolicy: false,
-        contentSecurityPolicy: false,
-    })
-  );
+    contentSecurityPolicy: false,
+}));
 
 //Passport:
 app.use(passport.initialize());
@@ -82,7 +97,7 @@ app.use((req,res,next)=>{
     next();
 })
 // Starting Mongoose Server:
-mongoose.connect("mongodb://127.0.0.1:27017/YelpCamp", { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 
 mongoose.connection.on('error', console.error.bind(console, "MONGO SERVER ERROR!"));
 mongoose.connection.once('open', () => {
@@ -111,6 +126,7 @@ app.use((err, req, res, next) => {
 })
 
 // Running Server:
-app.listen(3000, (req, res) => {
-    console.log("Listening on port 3000!");
+const port = process.env.PORT || 3000;
+app.listen(port, (req, res) => {
+    console.log(`Listening on port ${port}`);
 })
