@@ -51,7 +51,7 @@
         
     </div>
     <div class="col-4 offset-1">
-        <div id="map" style="width: 26rem; height: 15rem;"></div>
+        <div id="map"></div>
         <% if (currentUser) { %>
             <h3>Leave A Review: </h3>
             <form action="/campgrounds/<%= camp.id %>/reviews" method="POST" class="mb-4 needs-validation" novalidate>
