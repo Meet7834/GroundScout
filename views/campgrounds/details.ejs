@@ -41,8 +41,8 @@
             </ul>
             <% if (currentUser && camp.author._id.equals(currentUser._id)) { %>
                 <div class="card-body">
-                    <a href="/campgrounds/<%=camp.id%>/edit" class="card-link btn btn-info">Edit</a>
-                    <form action="/campgrounds/<%=camp.id%>/?_method=DELETE" method="POST" class="d-inline">
+                    <a href="/grounds/<%=camp.id%>/edit" class="card-link btn btn-info">Edit</a>
+                    <form action="/grounds/<%=camp.id%>/?_method=DELETE" method="POST" class="d-inline">
                         <button class="btn btn-danger">Delete</button>
                     </form>
                 </div>
@@ -54,7 +54,7 @@
         <div id="map"></div>
         <% if (currentUser) { %>
             <h3>Leave A Review: </h3>
-            <form action="/campgrounds/<%= camp.id %>/reviews" method="POST" class="mb-4 needs-validation" novalidate>
+            <form action="/grounds/<%= camp.id %>/reviews" method="POST" class="mb-4 needs-validation" novalidate>
                 <div class="mb-3">
                     <fieldset class="starability-basic">
                         <input type="radio" id="no-rate" class="input-no-rate" name="rating" value="5" checked aria-label="No rating." />
@@ -88,7 +88,7 @@
                     </p>
                     <p class="card-text"><%= review.content %></p>
                     <% if (currentUser && review.author._id.equals(currentUser._id)) { %>
-                        <form action="/campgrounds/<%=camp.id%>/reviews/<%= review.id %>?_method=DELETE" method="POST" class="d-inline">
+                        <form action="/grounds/<%=camp.id%>/reviews/<%= review.id %>?_method=DELETE" method="POST" class="d-inline">
                             <button class="btn btn-sm btn-danger">Delete</button>
                         </form>
                     <% } %>

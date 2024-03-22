@@ -11,15 +11,15 @@ module.exports.allCampsGet = async (req, res) => {
 };
 
 module.exports.renderCreateCampGet = (req, res) => {
-    res.render('campgrounds/new.ejs', { title: 'Create A Campground' });
+    res.render('campgrounds/new.ejs', { title: 'Create A Ground' });
 };
 
 module.exports.renderCampGet = async (req, res, next) => {
     const { id } = req.params;
     const camp = await Campground.findById(id).populate({ path: 'reviews', populate: 'author' }).populate('author');
     if (!camp) {
-        req.flash('error', "I am sorry, We can't find the campground");
-        res.redirect('/campgrounds');
+        req.flash('error', "I am sorry, We can't find the ground");
+        res.redirect('/grounds');
     } else {
         res.render('campgrounds/details.ejs', { camp, title: camp.title });
     }
@@ -29,10 +29,10 @@ module.exports.renderEditCampGet = async (req, res, next) => {
     const { id } = req.params;
     const camp = await Campground.findById(id);
     if (!camp) {
-        req.flash('error', "I am sorry, We can't find the campground");
-        res.redirect('/campgrounds');
+        req.flash('error', "I am sorry, We can't find the ground");
+        res.redirect('/grounds');
     }
-    res.render('campgrounds/edit.ejs', { camp, title: "Edit Campground" })
+    res.render('campgrounds/edit.ejs', { camp, title: "Edit Ground" })
 };
 
 module.exports.createCampPost = async (req, res, next) => {
@@ -46,8 +46,8 @@ module.exports.createCampPost = async (req, res, next) => {
     newCamp.images = req.files.map(file => ({ url: file.path, filename: file.filename }));
     newCamp.author = req.user._id;
     await newCamp.save();
-    req.flash('success', 'Successfully made a new Campground!');
-    res.redirect(`/campgrounds/${newCamp._id}`);
+    req.flash('success', 'Successfully made a new Ground!');
+    res.redirect(`/grounds/${newCamp._id}`);
 };
 
 module.exports.editCampPatch = async (req, res) => {
@@ -70,14 +70,14 @@ module.exports.editCampPatch = async (req, res) => {
         await editCamp.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages } } } })
     }
     console.log("Database Updated");
-    req.flash('success', 'Successfully updated the Campground!');
-    res.redirect(`/campgrounds/${id}`);
+    req.flash('success', 'Successfully updated the Ground!');
+    res.redirect(`/grounds/${id}`);
 };
 
 module.exports.deleteCampDelete = async (req, res) => {
     const { id } = req.params;
     await Campground.findByIdAndDelete(id);
     console.log("Deleted from Database");
-    req.flash('success', 'Successfully deleted the Campground!');
-    res.redirect('/campgrounds/');
+    req.flash('success', 'Successfully deleted the Ground!');
+    res.redirect('/grounds/');
 };

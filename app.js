@@ -1,4 +1,4 @@
-if(process.env.NODE_ENV !== 'production'){
+if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
 
@@ -23,8 +23,8 @@ const helmet = require('helmet');
 const MongoStore = require('connect-mongo');
 const MongoDBStore = require('connect-mongo')(session);
 
-// const dbUrl = process.env.DB_URL;
-const dbUrl = "mongodb://127.0.0.1:27017/YelpCamp";
+// const dbUrl = process.env.DB_URL || "mongodb://127.0.0.1:27017/GroundScout";
+const dbUrl = "mongodb://127.0.0.1:27017/GroundScout";
 
 //Routes:
 const campgroundRoutes = require('./routes/campgroundRoutes');
@@ -49,18 +49,18 @@ app.use(mongoSanitize({
 
 const secret = process.env.SECRET || 'thisisasecret';
 const store = new MongoDBStore({
-    url:dbUrl, 
+    url: dbUrl,
     secret,
-    touchAfter: 24*60*60
+    touchAfter: 24 * 60 * 60
 });
 
-store.on('error',(e)=>{
+store.on('error', (e) => {
     console.log('An error occured in the session', e);
 })
 
 //Configuring Session: 
 const sessionConfig = {
-    name:'session',
+    name: 'session',
     secret,
     resave: false,
     saveUninitialized: true,
@@ -77,8 +77,8 @@ app.use(flash());
 app.use(
     helmet({
         crossOriginEmbedderPolicy: false,
-    contentSecurityPolicy: false,
-}));
+        contentSecurityPolicy: false,
+    }));
 
 //Passport:
 app.use(passport.initialize());
@@ -89,7 +89,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.use((req,res,next)=>{
+app.use((req, res, next) => {
     // console.log(req.session);
     res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
@@ -97,17 +97,15 @@ app.use((req,res,next)=>{
     next();
 })
 // Starting Mongoose Server:
-mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true })
-
-mongoose.connection.on('error', console.error.bind(console, "MONGO SERVER ERROR!"));
-mongoose.connection.once('open', () => {
-    console.log("MONGO SERVER CONNECTED!");
-})
+try {
+    mongoose.connect(dbUrl)
+        .then(() => console.log('Connected to MongoDB'))
+} catch (err) { console.error('Error connecting to MongoDB:', err) }
 
 //Setting Up Routes:
 app.use('/', authorizationRoutes);
-app.use('/campgrounds', campgroundRoutes)
-app.use('/campgrounds/:id/reviews', reviewRoutes);
+app.use('/grounds', campgroundRoutes)
+app.use('/grounds/:id/reviews', reviewRoutes);
 
 // Get requests:
 app.get("/", (req, res) => {

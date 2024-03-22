@@ -14,7 +14,7 @@ module.exports.logOutGet = (req, res) => {
             return next(err);
         }
         req.flash('success', `Good Bye!`);
-        res.redirect('/campgrounds');
+        res.redirect('/grounds');
     })
 };
 
@@ -25,8 +25,8 @@ module.exports.createUserPost = async (req, res) => {
         const registeredUser = await User.register(newUser, password);
         req.login(registeredUser, (err)=>{
             if (err) return next(err);
-            req.flash('success', `Welcome to YelpCamp: ${registeredUser.username}!`);
-            res.redirect('/campgrounds');
+            req.flash('success', `Welcome to GroundScout: ${registeredUser.username}!`);
+            res.redirect('/grounds');
         })
     } catch (e) {
         req.flash('error', e.message);
@@ -36,5 +36,5 @@ module.exports.createUserPost = async (req, res) => {
 
 module.exports.loginUserPost = (req, res) => {
     req.flash('success', `Welcome Back ${req.user.username}!`);
-    res.redirect('/campgrounds');
+    res.redirect('/grounds');
 };

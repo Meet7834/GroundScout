@@ -12,7 +12,7 @@ module.exports.createReviewPost = async (req, res) => {
     // console.log(newReview);
     // res.render('campgrounds/details', {camp, title: camp.title});
     req.flash('success', 'Created New Review!'); 
-    res.redirect(`/campgrounds/${req.params.id}`);
+    res.redirect(`/grounds/${req.params.id}`);
 }
 
 module.exports.deleteReviewDelete = async (req, res) => {
@@ -20,5 +20,5 @@ module.exports.deleteReviewDelete = async (req, res) => {
     await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewID } });
     await Review.findByIdAndDelete(reviewID);
     req.flash('success', 'Deleted the Review!'); 
-    res.redirect(`/campgrounds/${id}`)
+    res.redirect(`/grounds/${id}`)
 }

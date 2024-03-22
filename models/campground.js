@@ -56,7 +56,7 @@ CampGroundSchema.post('findOneAndDelete', async function (doc) {
 
 CampGroundSchema.virtual('properties.popUpMarkup').get(function(){
     return `
-    <strong><a href="/campgrounds/${this.id}" style="text-decoration: none; color: #039dfc">${this.title}</a></strong>
+    <strong><a href="/grounds/${this.id}" style="text-decoration: none; color: #039dfc">${this.title}</a></strong>
     <p>${this.description.substring(0,80)}...</p>
     `
 });

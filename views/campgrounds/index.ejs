@@ -1,6 +1,6 @@
 <%= layout('layout/layout.ejs') %>
 <div id="cluster-map"></div>
-<h1>All Campgrounds</h1>
+<h1>All Grounds</h1>
 
 <div class="mb-3">
     <% for( let camp of allCamps) { %>
@@ -14,7 +14,7 @@
                     <% } %>
                     <div class="col-md-8">
                         <div class="card-body">
-                            <a href="/campgrounds/<%= camp.id %>" style="text-decoration: none; color: black" ;>
+                            <a href="/grounds/<%= camp.id %>" style="text-decoration: none; color: black" ;>
                                 <h5 class="card-title"><%= camp.title %>
                                 </h5>
                             </a>
